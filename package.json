@@ -1,0 +1,35 @@
+{
+  "name": "destiny-slack-bot",
+  "version": "1.0.0",
+  "description": "Slack planning bot for destiny 2 activities",
+  "main": "dist/server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-winston": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.6",
+    "@types/express-winston": "^4.0.0",
+    "@types/node": "10.x",
+    "@types/winston": "^2.4.4",
+    "nodemon": "^2.0.4",
+    "typescript": "^3.9.5"
+  },
+  "scripts": {
+    "start": "node ./dist/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-build": "tsc --watch",
+    "dev-start": "nodemon dist/server.js --watch dist",
+    "dev-deploy": "gcloud app deploy && gcloud app logs tail -s default"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legion0/destiny-slack-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/legion0/destiny-slack-bot/issues"
+  },
+  "homepage": "https://github.com/legion0/destiny-slack-bot#readme"
+}

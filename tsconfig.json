@@ -1,0 +1,16 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES6",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "sourceMap": true,
+    "esModuleInterop": true
+  },
+  "forceConsistentCasingInFileNames": true,
+  "noImplicitReturns": true,
+  "strict": true,
+  "noUnusedLocals": true,
+  "emitDecoratorMetadata": true
+}
