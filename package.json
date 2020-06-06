@@ -4,8 +4,12 @@
   "description": "Slack planning bot for destiny 2 activities",
   "main": "dist/server.js",
   "dependencies": {
+    "@google-cloud/datastore": "^6.0.0",
+    "@types/lodash": "^4.14.155",
     "@types/yargs": "^15.0.5",
+    "express": "^4.17.1",
     "express-winston": "^4.0.3",
+    "lodash": "^4.17.15",
     "yargs": "^15.3.1"
   },
   "devDependencies": {
@@ -20,7 +24,7 @@
     "start": "node ./dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-build": "tsc --watch",
-    "dev-start": "nodemon dist/server.js --watch dist",
+    "dev-start": "source local_env.sh; nodemon dist/server.js --watch dist",
     "dev-deploy": "gcloud app deploy && gcloud app logs tail -s default"
   },
   "repository": {

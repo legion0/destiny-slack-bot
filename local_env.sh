@@ -1,0 +1,2 @@
+export PROJECT_ID=destiny-slack-bot
+export GOOGLE_APPLICATION_CREDENTIALS=dev_gcloud_key.json

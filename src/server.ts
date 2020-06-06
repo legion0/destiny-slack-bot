@@ -1,8 +1,29 @@
 import express from "express";
 import winston from "winston";
 import yargs from "yargs";
-
+import { Datastore } from "@google-cloud/datastore";
 import expressWinston from "express-winston";
+import _ from "lodash";
+
+console.log(process.env);
+
+const datastore = new Datastore();
+
+const insertVisit = (visit) => {
+  return datastore.save({
+    key: datastore.key("visit"),
+    data: visit,
+  });
+};
+
+const getVisits = async () => {
+  const query = datastore
+    .createQuery("visit")
+    .order("timestamp", { descending: true })
+    .limit(10);
+
+  return datastore.runQuery(query);
+};
 
 const app = express();
 
@@ -43,27 +64,56 @@ const parser = yargs
   .help()
   .demandCommand(1, "no command provided, see help");
 
-app.post("/kadi", (req, res) => {
+app.post("/kadi", async (req, res) => {
+  const visit = {
+    timestamp: new Date(),
+    // Store a hash of the visitor's ip address
+    userIp: "123",
+  };
+  await insertVisit(visit);
+  const [entities] = await getVisits();
+  console.log(entities);
   parser.parse(req.body.text, function (err, argv, output) {
     if (output) {
-      res.send(output);
+      res.send(ephemeralResponse(output));
     } else if (err) {
-      res.send(err);
+      res.send(ephemeralResponse(err));
     } else if (argv) {
+      let cmdOut = null;
       switch (argv._[0]) {
         case "createActivity":
-          let cmdOut = createActivity(argv.name);
-          res.send(cmdOut);
+          cmdOut = createActivity(req.body, argv.name);
           break;
-        default:
-          res.send("default switch");
+      }
+      if (_.isNumber(cmdOut)) {
+        res.sendStatus(cmdOut);
+      } else if (_.isObject(cmdOut) || _.isString(cmdOut)) {
+        res.send(cmdOut);
+      } else {
+        res.sendStatus(200);
       }
     }
   });
 });
 
-function createActivity(name) {
-  return `Created Activity named [${name}]`;
+function ephemeralResponse(text: string) {
+  return {
+    response_type: "ephemeral",
+    text: text,
+  };
+}
+
+function inChannelResponse(text: string) {
+  return {
+    response_type: "in_channel",
+    text: text,
+  };
+}
+
+function createActivity(reqBody, name: string) {
+  return inChannelResponse(
+    `${reqBody.user_name} created a new activity [${name}]`
+  );
 }
 
 // Listen to the App Engine-specified port, or 8080 otherwise
@@ -71,5 +121,3 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}/ ...`);
 });
-
-function runCommand(command, ...args) {}
