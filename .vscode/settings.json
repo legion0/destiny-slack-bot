@@ -3,5 +3,6 @@
 "cSpell.words": [
 	"gcloud"
 ],
-"jshint.enable": false
+"jshint.enable": false,
+"editor.defaultFormatter": "esbenp.prettier-vscode"
 }
